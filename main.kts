@@ -3,12 +3,58 @@
 println("UW Homework: Simple Kotlin")
 
 // write a "whenFn" that takes an arg of type "Any" and returns a String
+fun whenFn(arg: Any): String {
+    when(arg) {
+        "Hello" -> return "world"
+        is String -> return "I don't understand"
+        0 -> return "zero"
+        1 -> return "one"
+        in 2..10 -> return "low number"
+        !in 2..10 -> return "a number"
+        else -> return "I don't understand"
+    }
+}
 
 // write an "add" function that takes two Ints, returns an Int, and adds the values
+fun add(a: Int, b: Int): Int {
+    return a + b
+}
 // write a "sub" function that takes two Ints, returns an Int, and subtracts the values
+fun sub(a: Int, b: Int): Int {
+    return a - b
+}
 // write a "mathOp" function that takes two Ints and a function (that takes two Ints and returns an Int), returns an Int, and applies the passed-in-function to the arguments
+fun mathOp(a: Int, b: Int, fn: (Int, Int) -> Int): Int {
+    return fn(a, b)
+}
 
 // write a class "Person" with first name, last name and age
+class Person(var firstName: String, val lastName: String, var age: Int) {
+    fun equals(other: Person): Boolean {
+        return (firstName == other.firstName && lastName == other.lastName && age == other.age)
+    }
+
+    var hashCode: Int = 0;
+
+    override fun hashCode(): Int {
+        var result: Int = hashCode
+
+        if (result == 0) {
+            result = 17
+            result = 31 * result + firstName.hashCode()
+            result = 31 * result + age.hashCode()
+            result = 31 * result + lastName.hashCode()
+            hashCode = result
+        }
+
+        return hashCode
+    }
+
+    val debugString: String
+        get() {
+            return "[Person firstName:${firstName} lastName:${lastName} age:${age}]"
+        }
+}
 
 // write a class "Money"
 
