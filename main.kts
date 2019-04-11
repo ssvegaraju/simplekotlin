@@ -6,11 +6,11 @@ println("UW Homework: Simple Kotlin")
 fun whenFn(arg: Any): String {
     when(arg) {
         "Hello" -> return "world"
-        is String -> return "I don't understand"
+        is String -> return "Say what?"
         0 -> return "zero"
         1 -> return "one"
         in 2..10 -> return "low number"
-        !in 2..10 -> return "a number"
+        is Int -> return "a number"
         else -> return "I don't understand"
     }
 }
@@ -57,6 +57,96 @@ class Person(var firstName: String, val lastName: String, var age: Int) {
 }
 
 // write a class "Money"
+class Money() {
+
+    constructor(amt: Int, cur: String) : this() {
+        amount = amt
+        currency = cur
+    }
+
+    val USDtoGBP: Double = 0.5
+    val USDtoEUR: Double = 1.5
+    val USDtoCAN: Double = 1.25
+    val GBPtoEUR: Double = 3.0
+    val GBPtoCAN: Double = 2.5
+    val CANtoEUR: Double = 1.2
+
+    private var _amount: Int = 0
+    public var amount: Int
+        get() {
+            return _amount
+        }
+        set(value) {
+            if (value < 0) {
+                _amount = 0
+            } else {
+                _amount = value
+            }
+        }
+    private var _currency: String = "USD"
+    public var currency: String
+        get() {
+            return _currency
+        }
+        set(value) {
+            if (value == "USD" || value != "EUR" || value != "CAN" || value != "GBP") {
+                _currency = value
+            }
+        }
+
+    fun convert(newCurrency: String): Money {
+        when (newCurrency) {
+            currency -> return Money(amount, currency)
+            "GBP" -> {
+                if (currency == "USD") {
+                    return Money((amount * USDtoGBP).toInt(), newCurrency)
+                } else if (currency == "EUR") {
+                    return Money((amount * (1/GBPtoEUR)).toInt(), newCurrency)
+                } else {
+                    return Money((amount * (1/GBPtoCAN)).toInt(), newCurrency)
+                }
+            }
+            "USD" -> {
+                if (currency == "EUR") {
+                    return Money((amount * (1/USDtoEUR)).toInt(), newCurrency)
+                } else if (currency == "CAN") {
+                    return Money((amount * (1/USDtoCAN)).toInt(), newCurrency)
+                } else {
+                    return Money((amount * (1/USDtoGBP)).toInt(), newCurrency)
+                }
+            }
+            "EUR" -> {
+                if (currency == "USD") {
+                    return Money((amount * USDtoEUR).toInt(), newCurrency)
+                } else if (currency == "CAN") {
+                    return Money((amount * CANtoEUR).toInt(), newCurrency)
+                } else {
+                    return Money((amount * GBPtoEUR).toInt(), newCurrency)
+                }
+            }
+            "CAN" -> {
+                if (currency == "USD") {
+                    return Money((amount * USDtoCAN).toInt(), newCurrency)
+                } else if (currency == "EUR") {
+                    return Money((amount * (1/CANtoEUR)).toInt(), newCurrency)
+                } else {
+                    return Money((amount * GBPtoCAN).toInt(), newCurrency)
+                }
+            }
+            else -> return Money(0, "USD")
+        }
+    }
+
+    operator fun plus(other: Money): Money {
+        var temp: Money
+        if (currency != other.currency) {
+            temp = convert(currency);
+        } else {
+            temp = other
+        }
+        return Money(amount + temp.amount, currency);
+    }
+}
 
 // ============ DO NOT EDIT BELOW THIS LINE =============
 
